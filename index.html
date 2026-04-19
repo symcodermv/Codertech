@@ -8,7 +8,7 @@
 <style>
 :root{
   --primary:#0ea5e9;--primary-dark:#0284c7;--primary-light:rgba(14,165,233,0.1);
-  --accent:#f97316;--dark:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --accent:#f97316;--surface:#1e293b;--surface2:#334155;
   --text:#f1f5f9;--muted:#94a3b8;--border:#334155;--card:#1e293b;
   --success:#22c55e;--danger:#ef4444;
 }
@@ -17,50 +17,57 @@ body{font-family:'DM Sans',sans-serif;background:#0f172a;color:var(--text);min-h
 
 #authOverlay{position:fixed;inset:0;background:rgba(9,14,26,0.97);backdrop-filter:blur(20px);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;}
 #authOverlay.hidden{display:none;}
-.auth-card{background:var(--surface);border:1px solid var(--border);border-radius:24px;width:100%;max-width:400px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,0.6);}
-.auth-hdr{background:linear-gradient(135deg,#0a1628 0%,#0c2340 100%);padding:30px 30px 26px;border-bottom:1px solid var(--border);}
-.auth-brand{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
-.auth-brand-icon{width:38px;height:38px;background:var(--primary);border-radius:11px;display:flex;align-items:center;justify-content:center;}
-.auth-brand-name{font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:800;color:#fff;}
+.auth-card{background:var(--surface);border:1px solid var(--border);border-radius:24px;width:100%;max-width:420px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,0.6);}
+.auth-hdr{background:linear-gradient(135deg,#0a1628 0%,#0c2340 100%);padding:28px 28px 24px;border-bottom:1px solid var(--border);}
+.auth-brand{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.auth-brand-icon{width:36px;height:36px;background:var(--primary);border-radius:10px;display:flex;align-items:center;justify-content:center;}
+.auth-brand-name{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;color:#fff;}
 .auth-brand-name span{color:var(--primary);}
-.auth-title{font-family:'Syne',sans-serif;font-size:1.35rem;font-weight:700;color:#fff;margin-bottom:4px;}
-.auth-sub{font-size:0.83rem;color:rgba(255,255,255,0.4);}
-.auth-body{padding:26px 30px;}
+.auth-title{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:700;color:#fff;margin-bottom:4px;}
+.auth-sub{font-size:0.82rem;color:rgba(255,255,255,0.4);}
+.auth-body{padding:24px 28px;}
 .step{display:none;animation:fadeUp 0.3s ease;}
 .step.active{display:block;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.step-pill{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--primary);background:var(--primary-light);padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:11px;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.step-pill{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--primary);background:var(--primary-light);padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:10px;}
 .step-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:3px;}
-.step-sub{font-size:0.82rem;color:var(--muted);margin-bottom:20px;}
+.step-sub{font-size:0.81rem;color:var(--muted);margin-bottom:18px;}
 .fg{margin-bottom:14px;}
-.fg label{display:block;font-size:0.76rem;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;}
+.fg label{display:block;font-size:0.74rem;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;}
 .phone-wrap{display:flex;border:1.5px solid var(--border);border-radius:12px;overflow:hidden;background:#111827;transition:border-color 0.2s;}
 .phone-wrap:focus-within{border-color:var(--primary);box-shadow:0 0 0 3px rgba(14,165,233,0.12);}
-.phone-prefix{background:var(--surface2);padding:0 13px;display:flex;align-items:center;gap:7px;font-weight:700;font-size:0.86rem;color:var(--muted);border-right:1px solid var(--border);flex-shrink:0;}
+.phone-prefix{background:var(--surface2);padding:0 12px;display:flex;align-items:center;gap:6px;font-weight:700;font-size:0.85rem;color:var(--muted);border-right:1px solid var(--border);flex-shrink:0;}
 .phone-wrap input{flex:1;padding:13px;background:transparent;border:none;outline:none;font-size:0.93rem;font-family:'DM Sans',sans-serif;color:var(--text);letter-spacing:2px;}
 .phone-wrap input::placeholder{letter-spacing:0;color:var(--muted);}
+
+/* Visible reCAPTCHA container */
+#recaptcha-container{
+  margin:14px 0;
+  display:flex;
+  justify-content:center;
+}
+
 .otp-boxes{display:flex;gap:8px;margin-bottom:8px;}
-.otp-box{flex:1;height:56px;text-align:center;font-size:1.4rem;font-weight:800;border:1.5px solid var(--border);border-radius:11px;background:#111827;color:var(--text);outline:none;font-family:'Syne',sans-serif;transition:all 0.2s;caret-color:var(--primary);}
+.otp-box{flex:1;height:54px;text-align:center;font-size:1.4rem;font-weight:800;border:1.5px solid var(--border);border-radius:11px;background:#111827;color:var(--text);outline:none;font-family:'Syne',sans-serif;transition:all 0.2s;caret-color:var(--primary);}
 .otp-box:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(14,165,233,0.12);}
 .otp-box.filled{background:var(--primary-light);border-color:var(--primary);}
 .resend-row{display:flex;justify-content:space-between;align-items:center;margin-top:10px;}
-.resend-timer{font-size:0.79rem;color:var(--muted);}
-.resend-link{font-size:0.79rem;color:var(--primary);font-weight:600;cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif;padding:0;}
+.resend-timer{font-size:0.78rem;color:var(--muted);}
+.resend-link{font-size:0.78rem;color:var(--primary);font-weight:600;cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif;padding:0;}
 .resend-link:disabled{color:var(--muted);cursor:default;}
 .btn-auth{width:100%;padding:13px;background:var(--primary);border:none;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:0.93rem;border-radius:12px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:4px;}
 .btn-auth:hover{background:var(--primary-dark);}
 .btn-auth:disabled{opacity:0.6;cursor:not-allowed;}
-.btn-back-auth{background:none;border:none;color:var(--muted);font-size:0.82rem;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:5px;padding:0;margin-bottom:14px;}
+.btn-back-auth{background:none;border:none;color:var(--muted);font-size:0.81rem;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:5px;padding:0;margin-bottom:13px;}
 .btn-back-auth:hover{color:var(--text);}
-.auth-err{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#fca5a5;font-size:0.81rem;padding:9px 13px;border-radius:9px;margin-bottom:12px;display:none;}
+.auth-err{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#fca5a5;font-size:0.8rem;padding:9px 13px;border-radius:9px;margin-bottom:12px;display:none;word-break:break-word;}
 .auth-err.show{display:block;animation:fadeUp 0.2s;}
-.otp-info{background:rgba(14,165,233,0.07);border:1px solid rgba(14,165,233,0.18);border-radius:9px;padding:9px 13px;font-size:0.79rem;color:rgba(147,197,253,0.85);display:flex;gap:7px;margin-bottom:18px;}
-#recaptcha-container{margin-bottom:10px;}
+.otp-info{background:rgba(14,165,233,0.07);border:1px solid rgba(14,165,233,0.18);border-radius:9px;padding:9px 13px;font-size:0.78rem;color:rgba(147,197,253,0.85);display:flex;gap:7px;margin-bottom:16px;}
 
-.user-strip{background:rgba(14,165,233,0.07);border-bottom:1px solid rgba(14,165,233,0.15);padding:7px 22px;display:flex;align-items:center;justify-content:space-between;font-size:0.81rem;}
+.user-strip{background:rgba(14,165,233,0.07);border-bottom:1px solid rgba(14,165,233,0.15);padding:7px 22px;display:flex;align-items:center;justify-content:space-between;font-size:0.8rem;}
 .user-strip-info{display:flex;align-items:center;gap:7px;color:var(--muted);}
 .user-strip-phone{color:var(--primary);font-weight:600;}
-.user-strip-logout{background:none;border:1px solid rgba(239,68,68,0.3);color:#fca5a5;cursor:pointer;font-size:0.76rem;font-family:'DM Sans',sans-serif;padding:3px 10px;border-radius:20px;}
+.user-strip-logout{background:none;border:1px solid rgba(239,68,68,0.3);color:#fca5a5;cursor:pointer;font-size:0.75rem;font-family:'DM Sans',sans-serif;padding:3px 10px;border-radius:20px;}
 
 nav{position:sticky;top:0;z-index:100;background:rgba(15,23,42,0.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 22px;display:flex;align-items:center;gap:13px;height:60px;}
 .nav-brand{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--primary);letter-spacing:-0.5px;flex-shrink:0;}
@@ -90,8 +97,7 @@ main{padding:24px 22px;}
 .pcard-name{font-weight:600;font-size:0.85rem;line-height:1.4;}
 .pcard-foot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;}
 .pcard-price{font-family:'Syne',sans-serif;font-weight:700;font-size:0.96rem;color:var(--primary);}
-.add-btn{width:31px;height:31px;border-radius:50%;background:var(--primary);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s;flex-shrink:0;}
-.add-btn:hover{background:var(--primary-dark);}
+.add-btn{width:31px;height:31px;border-radius:50%;background:var(--primary);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .hot-badge{position:absolute;top:8px;left:8px;background:var(--accent);color:#fff;font-size:0.6rem;font-weight:800;padding:2px 7px;border-radius:20px;text-transform:uppercase;}
 .empty-state{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--muted);}
 
@@ -122,8 +128,8 @@ main{padding:24px 22px;}
 .modal-ov.open{display:flex;}
 .modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;animation:scaleIn 0.25s ease;}
 @keyframes scaleIn{from{transform:scale(0.94) translateY(20px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
-.modal-img{background:var(--card);border-radius:16px 16px 0 0;padding:34px;display:flex;align-items:center;justify-content:center;min-height:210px;}
-.modal-img img{max-width:170px;max-height:170px;object-fit:contain;}
+.modal-img{background:var(--card);border-radius:16px 16px 0 0;padding:34px;display:flex;align-items:center;justify-content:center;min-height:200px;}
+.modal-img img{max-width:160px;max-height:160px;object-fit:contain;}
 .modal-body{padding:20px 22px;}
 .modal-name{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:700;margin-bottom:6px;}
 .modal-price{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--primary);margin-bottom:13px;}
@@ -135,7 +141,7 @@ main{padding:24px 22px;}
 .ck-hdr{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
 .ck-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;}
 .ck-body{padding:20px 22px;display:flex;flex-direction:column;gap:13px;}
-.ck-label{font-size:0.75rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px;}
+.ck-label{font-size:0.74rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px;}
 .ck-input{width:100%;padding:10px 13px;background:#111827;border:1.5px solid var(--border);border-radius:9px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none;transition:border-color 0.2s;}
 .ck-input:focus{border-color:var(--primary);}
 .ck-input::placeholder{color:var(--muted);}
@@ -160,7 +166,7 @@ main{padding:24px 22px;}
     <div class="auth-hdr">
       <div class="auth-brand">
         <div class="auth-brand-icon">
-          <svg width="19" height="19" fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          <svg width="18" height="18" fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
         </div>
         <span class="auth-brand-name">Coder<span>Tech</span></span>
       </div>
@@ -168,24 +174,29 @@ main{padding:24px 22px;}
       <div class="auth-sub">Maldivian number required (+960)</div>
     </div>
     <div class="auth-body">
+
+      <!-- Step 1 -->
       <div class="step active" id="s1">
         <div class="step-pill">Step 1 of 2</div>
         <div class="step-title">Your phone number</div>
-        <div class="step-sub">We'll send a 6-digit OTP via SMS</div>
+        <div class="step-sub">Complete the reCAPTCHA then receive OTP</div>
         <div class="auth-err" id="e1"></div>
         <div class="fg">
           <label>Phone Number</label>
           <div class="phone-wrap">
             <div class="phone-prefix">🇲🇻 +960</div>
-            <input type="tel" id="phoneIn" maxlength="7" placeholder="7XXXXXX" inputmode="numeric" onkeydown="if(event.key==='Enter')sendOTP()">
+            <input type="tel" id="phoneIn" maxlength="7" placeholder="7XXXXXX" inputmode="numeric">
           </div>
         </div>
+        <!-- VISIBLE recaptcha — fixes error-code:-39 on mobile -->
         <div id="recaptcha-container"></div>
         <button class="btn-auth" onclick="sendOTP()" id="sendBtn">
           Send OTP
           <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </button>
       </div>
+
+      <!-- Step 2 -->
       <div class="step" id="s2">
         <button class="btn-back-auth" onclick="goBack()">
           <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
@@ -218,10 +229,12 @@ main{padding:24px 22px;}
           <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
         </button>
       </div>
+
     </div>
   </div>
 </div>
 
+<!-- STORE -->
 <div id="storeApp" style="display:none">
   <div class="user-strip">
     <div class="user-strip-info">
@@ -301,11 +314,9 @@ main{padding:24px 22px;}
 
 <div class="toast" id="toast"></div>
 
-<!-- ✅ COMPAT SDK — fixes reCAPTCHA "Something went wrong" error -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-
 <script>
 firebase.initializeApp({
   apiKey:"AIzaSyAEPb1cV5ThxVni1_W_dCRAn8wl_v6otew",
@@ -316,28 +327,39 @@ firebase.initializeApp({
   messagingSenderId:"575348564273",
   appId:"1:575348564273:web:f5c0181b26fa8f2bb69010"
 });
+const auth=firebase.auth();
+const db=firebase.database();
 
-const auth = firebase.auth();
-const db   = firebase.database();
+let cr=null,rc=null,ti=null,prods=[],cats=[],cu=null;
+let cart=JSON.parse(localStorage.getItem('ct_cart')||'[]');
+let curCat='All';
 
-let cr=null, rc=null, ti=null;
-let prods=[], cats=[], cu=null;
-let cart = JSON.parse(localStorage.getItem('ct_cart')||'[]');
-let curCat = 'All';
-
-// ── Init reCAPTCHA once DOM ready ──
+// ── Init VISIBLE reCAPTCHA — fixes error-code:-39 ──
 function initRC(){
   if(rc) return;
-  rc = new firebase.auth.RecaptchaVerifier('recaptcha-container',{
-    size:'invisible',
-    callback:()=>{},
-    'expired-callback':()=>{ rc=null; initRC(); }
-  });
-  rc.render().catch(()=>{});
+  try{
+    rc=new firebase.auth.RecaptchaVerifier('recaptcha-container',{
+      size:'normal', // VISIBLE — user clicks checkbox
+      callback:()=>{
+        // reCAPTCHA solved — auto enable send button
+        document.getElementById('sendBtn').disabled=false;
+      },
+      'expired-callback':()=>{
+        document.getElementById('sendBtn').disabled=true;
+        rc=null; initRC();
+      }
+    });
+    rc.render().then(widgetId=>{
+      window.recaptchaWidgetId=widgetId;
+    }).catch(e=>console.error('RC render error:',e));
+  }catch(e){console.error('RC init error:',e);}
 }
-document.addEventListener('DOMContentLoaded', initRC);
 
-// ── Auth state ──
+document.addEventListener('DOMContentLoaded',()=>{
+  // small delay to ensure DOM is ready
+  setTimeout(initRC, 500);
+});
+
 auth.onAuthStateChanged(u=>{
   cu=u;
   if(u){
@@ -346,74 +368,70 @@ auth.onAuthStateChanged(u=>{
     document.getElementById('loggedPhone').textContent=u.phoneNumber||'';
     document.getElementById('ckPhone').value=u.phoneNumber||'';
     loadData();
-  } else {
+  }else{
     document.getElementById('authOverlay').classList.remove('hidden');
     document.getElementById('storeApp').style.display='none';
   }
 });
 
-// ── Send OTP ──
-window.sendOTP = async()=>{
+window.sendOTP=async()=>{
   const raw=document.getElementById('phoneIn').value.trim();
   const e=document.getElementById('e1');
   e.classList.remove('show');
   if(!/^\d{7}$/.test(raw)){
-    e.textContent='Enter a valid 7-digit number.';
-    e.classList.add('show'); return;
+    e.textContent='Enter a valid 7-digit Maldivian number.';
+    e.classList.add('show');return;
   }
+  if(!rc){e.textContent='Please wait for reCAPTCHA to load.';e.classList.add('show');return;}
   const phone='+960'+raw;
   const btn=document.getElementById('sendBtn');
-  btn.innerHTML='<span class="spinner"></span> Sending…'; btn.disabled=true;
-  try {
-    initRC();
-    cr = await auth.signInWithPhoneNumber(phone, rc);
+  btn.innerHTML='<span class="spinner"></span> Sending…';btn.disabled=true;
+  try{
+    cr=await auth.signInWithPhoneNumber(phone,rc);
     document.getElementById('otpSentTo').textContent='Code sent to '+phone;
     document.getElementById('s1').classList.remove('active');
     document.getElementById('s2').classList.add('active');
     startTimer();
     document.querySelector('.otp-box').focus();
-  } catch(err){
-    console.error(err);
-    e.textContent = errMsg(err.code);
+  }catch(err){
+    console.error('OTP error:',err.code,err.message);
+    e.textContent=errMsg(err.code);
     e.classList.add('show');
     // Reset reCAPTCHA
-    if(rc){ try{rc.clear();}catch(x){} rc=null; }
-    initRC();
+    try{if(typeof grecaptcha!=='undefined'&&window.recaptchaWidgetId!==undefined){grecaptcha.reset(window.recaptchaWidgetId);}}catch(x){}
+    rc=null; setTimeout(initRC,300);
   }
   btn.innerHTML='Send OTP <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
   btn.disabled=false;
 };
 
-// ── Resend ──
-window.resend = async()=>{
-  if(rc){ try{rc.clear();}catch(x){} rc=null; }
-  initRC();
+window.resend=async()=>{
+  try{if(typeof grecaptcha!=='undefined'&&window.recaptchaWidgetId!==undefined){grecaptcha.reset(window.recaptchaWidgetId);}}catch(x){}
+  rc=null;setTimeout(initRC,300);
   const raw=document.getElementById('phoneIn').value.trim();
-  try{
-    cr = await auth.signInWithPhoneNumber('+960'+raw, rc);
-    startTimer(); toast('OTP resent!');
-  } catch(err){
-    document.getElementById('e2').textContent=errMsg(err.code);
-    document.getElementById('e2').classList.add('show');
-    if(rc){ try{rc.clear();}catch(x){} rc=null; }
-    initRC();
-  }
+  setTimeout(async()=>{
+    try{
+      cr=await auth.signInWithPhoneNumber('+960'+raw,rc);
+      startTimer();toast('OTP resent!');
+    }catch(err){
+      document.getElementById('e2').textContent=errMsg(err.code);
+      document.getElementById('e2').classList.add('show');
+    }
+  },1000);
 };
 
-// ── Verify OTP ──
-window.verifyOTP = async()=>{
+window.verifyOTP=async()=>{
   const code=[...document.querySelectorAll('.otp-box')].map(d=>d.value).join('');
   const e=document.getElementById('e2');
   e.classList.remove('show');
   if(code.length!==6){e.textContent='Enter all 6 digits.';e.classList.add('show');return;}
   if(!cr){e.textContent='Session expired. Go back and try again.';e.classList.add('show');return;}
   const btn=document.getElementById('verifyBtn');
-  btn.innerHTML='<span class="spinner"></span> Verifying…'; btn.disabled=true;
-  try{
-    await cr.confirm(code);
-  } catch(err){
-    console.error(err);
-    e.textContent=errMsg(err.code); e.classList.add('show');
+  btn.innerHTML='<span class="spinner"></span> Verifying…';btn.disabled=true;
+  try{await cr.confirm(code);}
+  catch(err){
+    console.error('Verify error:',err.code,err.message);
+    e.textContent=errMsg(err.code);e.classList.add('show');
     document.querySelectorAll('.otp-box').forEach(d=>{d.value='';d.classList.remove('filled');d.style.borderColor='var(--danger)';});
     btn.innerHTML='Verify & Shop <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>';
     btn.disabled=false;
@@ -427,83 +445,52 @@ window.goBack=()=>{
   document.getElementById('e2').classList.remove('show');
   clearInterval(ti);
 };
-
-window.doLogout=()=>{
-  auth.signOut();
-  cart=[]; localStorage.removeItem('ct_cart'); updateBadge();
-};
+window.doLogout=()=>{auth.signOut();cart=[];localStorage.removeItem('ct_cart');updateBadge();};
 
 window.oi=(el,i)=>{
   el.value=el.value.replace(/\D/g,'');
-  if(el.value){
-    el.classList.add('filled'); el.style.borderColor='';
-    const n=document.querySelectorAll('.otp-box')[i+1]; if(n) n.focus();
-    if([...document.querySelectorAll('.otp-box')].every(d=>d.value)) verifyOTP();
-  } else el.classList.remove('filled');
+  if(el.value){el.classList.add('filled');el.style.borderColor='';const n=document.querySelectorAll('.otp-box')[i+1];if(n)n.focus();if([...document.querySelectorAll('.otp-box')].every(d=>d.value))verifyOTP();}
+  else el.classList.remove('filled');
 };
-window.ok=(e,i)=>{
-  if(e.key==='Backspace'){
-    const el=document.querySelectorAll('.otp-box')[i];
-    if(!el.value){const p=document.querySelectorAll('.otp-box')[i-1];if(p){p.value='';p.classList.remove('filled');p.focus();}}
-  }
-};
+window.ok=(e,i)=>{if(e.key==='Backspace'){const el=document.querySelectorAll('.otp-box')[i];if(!el.value){const p=document.querySelectorAll('.otp-box')[i-1];if(p){p.value='';p.classList.remove('filled');p.focus();}}}};
 
 function startTimer(){
-  let s=60; document.getElementById('resendBtn').disabled=true;
-  document.getElementById('timerEl').style.display='block';
-  clearInterval(ti);
-  ti=setInterval(()=>{
-    s--; document.getElementById('timerN').textContent=s;
-    if(s<=0){clearInterval(ti);document.getElementById('resendBtn').disabled=false;document.getElementById('timerEl').style.display='none';}
-  },1000);
+  let s=60;document.getElementById('resendBtn').disabled=true;
+  document.getElementById('timerEl').style.display='block';clearInterval(ti);
+  ti=setInterval(()=>{s--;document.getElementById('timerN').textContent=s;if(s<=0){clearInterval(ti);document.getElementById('resendBtn').disabled=false;document.getElementById('timerEl').style.display='none';}},1000);
 }
 
 function errMsg(code){
   return({
-    'auth/invalid-phone-number':'Invalid phone number. Check and try again.',
-    'auth/too-many-requests':'Too many attempts. Please wait a few minutes.',
-    'auth/invalid-verification-code':'Wrong OTP code. Try again.',
-    'auth/code-expired':'OTP expired. Please resend.',
-    'auth/captcha-check-failed':'reCAPTCHA error. Refresh the page.',
-    'auth/quota-exceeded':'SMS quota exceeded. Try again later.',
-    'auth/network-request-failed':'Network error. Check your internet.',
-  })[code]||'Error: '+(code||'unknown')+'. Please try again.';
+    'auth/invalid-phone-number':'Invalid phone number.',
+    'auth/too-many-requests':'Too many attempts. Wait a few minutes.',
+    'auth/invalid-verification-code':'Wrong code. Try again.',
+    'auth/code-expired':'Code expired. Resend.',
+    'auth/captcha-check-failed':'reCAPTCHA failed. Refresh the page.',
+    'auth/quota-exceeded':'SMS quota exceeded. Try later.',
+    'auth/network-request-failed':'Network error. Check your connection.',
+    'auth/billing-not-enabled':'Firebase billing not enabled.',
+  })[code]||'Error ('+code+'). Please try again.';
 }
 
-window.toast=(msg,isErr=false)=>{
-  const el=document.getElementById('toast');
-  el.textContent=msg; el.className='toast'+(isErr?' err':'');
-  void el.offsetWidth; el.classList.add('show');
-  setTimeout(()=>el.classList.remove('show'),2500);
-};
+window.toast=(msg,isErr=false)=>{const el=document.getElementById('toast');el.textContent=msg;el.className='toast'+(isErr?' err':'');void el.offsetWidth;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2500);};
 
 function loadData(){
-  db.ref('ct_products').on('value',s=>{
-    prods=[];if(s.exists())s.forEach(c=>prods.push({id:c.key,...c.val()}));renderProds();
-  });
-  db.ref('ct_categories').on('value',s=>{
-    cats=[];if(s.exists())s.forEach(c=>cats.push({id:c.key,...c.val()}));renderCats();
-  });
+  db.ref('ct_products').on('value',s=>{prods=[];if(s.exists())s.forEach(c=>prods.push({id:c.key,...c.val()}));renderProds();});
+  db.ref('ct_categories').on('value',s=>{cats=[];if(s.exists())s.forEach(c=>cats.push({id:c.key,...c.val()}));renderCats();});
 }
 
 function renderCats(){
   const bar=document.getElementById('catsBar');
-  bar.innerHTML=`<button class="cat-btn ${curCat==='All'?'active':''}" onclick="setCat(this,'All')">✦ All</button>`+
-    cats.map(c=>`<button class="cat-btn ${curCat===c.name?'active':''}" onclick="setCat(this,'${c.name}')">${c.icon||'📦'} ${c.name}</button>`).join('');
+  bar.innerHTML=`<button class="cat-btn ${curCat==='All'?'active':''}" onclick="setCat(this,'All')">✦ All</button>`+cats.map(c=>`<button class="cat-btn ${curCat===c.name?'active':''}" onclick="setCat(this,'${c.name}')">${c.icon||'📦'} ${c.name}</button>`).join('');
 }
-window.setCat=(btn,cat)=>{
-  curCat=cat;
-  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('secTitle').textContent=cat==='All'?'Popular':cat;
-  renderProds();
-};
+window.setCat=(btn,cat)=>{curCat=cat;document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.getElementById('secTitle').textContent=cat==='All'?'Popular':cat;renderProds();};
 
 function renderProds(){
   const q=document.getElementById('searchIn')?.value.toLowerCase()||'';
   let list=prods.filter(p=>p.status!=='draft');
-  if(curCat!=='All') list=list.filter(p=>p.category===curCat);
-  if(q) list=list.filter(p=>p.name.toLowerCase().includes(q));
+  if(curCat!=='All')list=list.filter(p=>p.category===curCat);
+  if(q)list=list.filter(p=>p.name.toLowerCase().includes(q));
   const g=document.getElementById('prodGrid');
   if(!list.length){g.innerHTML=`<div class="empty-state"><p>No products found</p></div>`;return;}
   g.innerHTML=list.map(p=>`
@@ -549,36 +536,26 @@ window.openPM=id=>{
 window.closePM=()=>document.getElementById('prodMo').classList.remove('open');
 document.getElementById('prodMo').addEventListener('click',e=>{if(e.target===e.currentTarget)closePM();});
 
-window.openCK=()=>{
-  document.getElementById('ckSummary').textContent=cart.map(i=>`${i.name} ×${i.qty}`).join(', ');
-  document.getElementById('ckTotal').textContent=fmt(total());
-  document.getElementById('ckMo').classList.add('open');
-};
+window.openCK=()=>{document.getElementById('ckSummary').textContent=cart.map(i=>`${i.name} ×${i.qty}`).join(', ');document.getElementById('ckTotal').textContent=fmt(total());document.getElementById('ckMo').classList.add('open');};
 window.closeCK=()=>document.getElementById('ckMo').classList.remove('open');
 
 window.placeOrder=async()=>{
-  const name=document.getElementById('ckName').value.trim();
-  const addr=document.getElementById('ckAddr').value.trim();
+  const name=document.getElementById('ckName').value.trim(),addr=document.getElementById('ckAddr').value.trim();
   if(!name||!addr){toast('Fill all required fields.',true);return;}
-  const btn=document.getElementById('placeBtn');
-  btn.innerHTML='<span class="spinner"></span>'; btn.disabled=true;
+  const btn=document.getElementById('placeBtn');btn.innerHTML='<span class="spinner"></span>';btn.disabled=true;
   try{
     await db.ref('ct_orders').push({
       customer:{name,phone:cu?.phoneNumber||'',address:addr,notes:document.getElementById('ckNotes').value,uid:cu?.uid||''},
       items:cart.map(i=>({id:i.id,name:i.name,price:i.price,qty:i.qty})),
-      total:total(),status:'pending',
-      createdAt:firebase.database.ServerValue.TIMESTAMP
+      total:total(),status:'pending',createdAt:firebase.database.ServerValue.TIMESTAMP
     });
     cart=[];saveCart();updateBadge();renderCart();closeCK();
-    document.getElementById('cartDrawer').classList.remove('open');
-    document.getElementById('cartOv').classList.remove('open');
+    document.getElementById('cartDrawer').classList.remove('open');document.getElementById('cartOv').classList.remove('open');
     toast('🎉 Order placed! We\'ll contact you soon.');
     ['ckName','ckAddr','ckNotes'].forEach(id=>document.getElementById(id).value='');
   }catch(err){toast('Error: '+err.message,true);}
-  btn.innerHTML='<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Place Order';
-  btn.disabled=false;
+  btn.innerHTML='<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Place Order';btn.disabled=false;
 };
-
 updateBadge();
 </script>
 </body>
