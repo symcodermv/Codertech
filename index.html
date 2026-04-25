@@ -131,6 +131,7 @@ main{padding:16px;flex:1;}
 .add-btn{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--p),var(--p2));border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px var(--glow);transition:all .2s;}
 .add-btn:hover{box-shadow:0 6px 20px rgba(var(--pr),.4);transform:scale(1.1);}
 .add-btn.needs-login{background:linear-gradient(135deg,var(--t3),var(--t2));box-shadow:none;}
+.sw-tag{position:absolute;top:8px;right:8px;background:linear-gradient(135deg,#f97316,#ff9a00);color:#fff;font-size:.55rem;font-weight:700;padding:2px 7px;border-radius:20px;text-transform:uppercase;letter-spacing:.5px;z-index:2;}
 .hot-tag{position:absolute;top:8px;left:8px;background:linear-gradient(135deg,var(--ac),#fb923c);color:#fff;font-size:.58rem;font-weight:700;padding:3px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.5px;z-index:2;}
 .empty{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--t3);}
 .list-view .pcard{flex-direction:row;gap:14px;align-items:center;padding:14px;}
@@ -270,6 +271,11 @@ main{padding:16px;flex:1;}
 .sp-close-btn:hover{color:var(--tx);}
 /* ─────────────────────────────────────────────────────── */
 
+/* SOFTWARE INFO BOX */
+.sw-info-box{background:rgba(249,115,22,.06);border:1.5px solid rgba(249,115,22,.2);border-radius:14px;padding:14px;margin-bottom:16px;}
+.sw-info-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--ac);margin-bottom:10px;display:flex;align-items:center;gap:5px;}
+.sw-info-row{display:flex;align-items:center;gap:8px;font-size:.78rem;color:var(--t2);margin-bottom:4px;}
+.sw-info-row strong{color:var(--tx);}
 .lr-modal{background:var(--sur);border:1px solid var(--bd2);border-radius:22px;max-width:340px;width:calc(100% - 40px);padding:28px 24px;text-align:center;animation:scaleIn .25s ease;transition:background .3s;}
 .lr-icon{width:56px;height:56px;background:rgba(var(--pr),.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;border:1.5px solid rgba(var(--pr),.2);}
 .lr-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:8px;color:var(--tx);}
@@ -306,6 +312,31 @@ main{padding:16px;flex:1;}
 .ck-footer{padding:14px 20px;border-top:1px solid var(--bd);display:flex;gap:10px;justify-content:flex-end;position:sticky;bottom:0;background:var(--sur);transition:background .3s;}
 .btn-cancel{background:none;border:1.5px solid var(--bd2);color:var(--t2);padding:10px 16px;border-radius:11px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.85rem;transition:all .2s;}.btn-cancel:hover{border-color:var(--t2);color:var(--tx);}
 .btn-place{background:linear-gradient(135deg,var(--p),var(--p2));border:none;color:#fff;padding:10px 20px;border-radius:11px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;display:flex;align-items:center;gap:6px;transition:all .2s;box-shadow:0 4px 18px var(--glow);letter-spacing:.3px;}.btn-place:hover{box-shadow:0 6px 26px rgba(var(--pr),.35);}.btn-place:disabled{opacity:.5;cursor:not-allowed;}
+/* MY ORDERS MODAL */
+.orders-modal{background:var(--sur);border:1px solid var(--bd2);border-radius:22px 22px 0 0;width:100%;max-height:92vh;overflow-y:auto;animation:slideUp .3s ease;transition:background .3s;}
+@media(min-width:600px){.orders-modal{border-radius:22px;max-width:520px;animation:scaleIn .25s ease;}}
+.order-card{background:var(--sur2);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px;}
+.order-card-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.order-id{font-size:.72rem;color:var(--t2);font-weight:600;}
+.order-status-badge{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:3px 9px;border-radius:20px;}
+.st-pending{background:rgba(249,115,22,.1);color:var(--ac);border:1px solid rgba(249,115,22,.2);}
+.st-processing{background:rgba(var(--pr),.1);color:var(--p);border:1px solid rgba(var(--pr),.2);}
+.st-completed{background:rgba(34,197,94,.1);color:var(--ok);border:1px solid rgba(34,197,94,.2);}
+.st-cancelled{background:rgba(239,68,68,.1);color:var(--er);border:1px solid rgba(239,68,68,.2);}
+.order-item-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--bd);}
+.order-item-row:last-child{border-bottom:none;}
+.order-item-img{width:36px;height:36px;border-radius:7px;object-fit:contain;background:var(--sur3);border:1px solid var(--bd);padding:2px;flex-shrink:0;}
+.order-item-name{flex:1;font-size:.8rem;font-weight:600;color:var(--tx);}
+.order-item-price{font-size:.78rem;font-weight:700;color:var(--p);font-family:'Syne',sans-serif;}
+/* DOWNLOAD BOX */
+.dl-box{background:linear-gradient(135deg,rgba(34,197,94,.08),rgba(14,165,233,.08));border:1.5px solid rgba(34,197,94,.25);border-radius:12px;padding:14px;margin-top:6px;}
+.dl-box-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--ok);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.dl-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:linear-gradient(135deg,var(--ok),#16a34a);border:none;border-radius:10px;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer;text-decoration:none;transition:all .2s;box-shadow:0 4px 16px rgba(34,197,94,.25);margin-bottom:8px;}
+.dl-btn:hover{box-shadow:0 6px 24px rgba(34,197,94,.4);transform:translateY(-1px);}
+.dl-key-box{background:var(--sur);border:1px solid var(--bd2);border-radius:9px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.dl-key-label{font-size:.67rem;color:var(--t2);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;}
+.dl-key-val{font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:700;color:var(--tx);letter-spacing:.5px;}
+.dl-pending-note{font-size:.75rem;color:var(--t2);text-align:center;padding:8px;background:rgba(249,115,22,.06);border-radius:8px;border:1px solid rgba(249,115,22,.15);margin-top:6px;}
 .tg-float{position:fixed;bottom:20px;right:16px;z-index:150;background:#229ed9;color:#fff;border:none;border-radius:50%;width:52px;height:52px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(34,158,217,.5);text-decoration:none;transition:all .2s;}.tg-float:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(34,158,217,.7);}
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(120px);background:var(--sur);border:1px solid var(--bd2);color:var(--tx);padding:11px 20px;border-radius:40px;font-size:.82rem;font-weight:600;z-index:999;transition:transform .35s cubic-bezier(.34,1.56,.64,1),background .3s;white-space:nowrap;box-shadow:0 12px 30px rgba(0,0,0,.12);}
 [data-theme="dark"] .toast{box-shadow:0 12px 30px rgba(0,0,0,.5);}
@@ -409,6 +440,9 @@ main{padding:16px;flex:1;}
     <button class="sb-link on" onclick="sbSetCat('All')"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>All Products</button>
     <div id="sbCatLinks"></div>
     <div class="sb-divider"></div>
+    <div class="sb-sec">Account</div>
+    <button class="sb-link" id="myOrdersBtn" onclick="openMyOrders()" style="display:none"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/></svg>My Orders &amp; Downloads</button>
+    <div class="sb-divider"></div>
     <div class="sb-sec">Contact</div>
     <a class="sb-link" href="https://t.me/+9609121220" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="#229ed9"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.069l-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.932z"/></svg>Chat on Telegram</a>
     <a class="sb-link" href="tel:+9609121220"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8 19.79 19.79 0 01.0 2.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>Call: +9609121220</a>
@@ -442,6 +476,7 @@ main{padding:16px;flex:1;}
       <div class="modal-name" id="modalName"></div>
       <div class="modal-price" id="modalPrice"></div>
       <div class="modal-desc" id="modalDesc"></div>
+      <div id="modalSwInfo"></div>
       <div class="modal-actions">
         <button class="modal-add" id="modalAddBtn"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>Add to Cart</button>
         <button class="modal-share-btn" id="modalShareBtn" title="Share"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
@@ -487,6 +522,19 @@ main{padding:16px;flex:1;}
 </div>
 
 <!-- SHARE POPUP (new clean design, no URL shown) -->
+<!-- MY ORDERS & DOWNLOADS MODAL -->
+<div class="modal-bg" id="myOrdersModal">
+  <div class="orders-modal">
+    <div class="modal-drag"></div>
+    <div class="ck-hdr">
+      <span class="ck-title">My Orders &amp; Downloads</span>
+      <button class="xbtn" onclick="document.getElementById('myOrdersModal').classList.remove('on')"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="ck-body" id="myOrdersBody" style="gap:10px;">
+      <div style="text-align:center;padding:30px;color:var(--t3);"><span class="spin" style="width:20px;height:20px;display:inline-block;"></span></div>
+    </div>
+  </div>
+</div>
 <div id="sharePopup" class="share-popup" style="display:none;"></div>
 
 <a class="tg-float" href="https://t.me/+9609121220" target="_blank" rel="noopener" aria-label="Telegram"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.069l-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.932z"/></svg></a>
@@ -899,6 +947,8 @@ function showApp(){
   updateSbAuth();loadData();
 }
 function updateSbAuth(){
+  const ordBtn=document.getElementById('myOrdersBtn');
+  if(ordBtn) ordBtn.style.display=cu?'flex':'none';
   document.getElementById('sbAuthAction').innerHTML=cu
     ?`<button class="sb-logout" onclick="doLogout()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>Logout</button>`
     :`<button class="btn-auth" style="margin-top:0" onclick="goToLogin()">Sign In / Register</button>`;
@@ -1061,8 +1111,9 @@ function renderProds(){
     g.classList.remove('list-view');g.style.gridTemplateColumns='';
     g.innerHTML=list.map((p,i)=>`<div class="pcard" style="animation-delay:${i*.05}s" onclick="openProd('${p.id}')">
       ${p.featured==='true'||p.featured===true?`<span class="hot-tag">Hot</span>`:''}
+      ${p.productType==='software'?`<span class="sw-tag">💻 Software</span>`:''}
       <div class="pimg">
-        ${p.image?`<img src="${p.image}" alt="${p.name}" loading="lazy">`:`<span style="font-size:2rem">📦</span>`}
+        ${p.image?`<img src="${p.image}" alt="${p.name}" loading="lazy">`:`<span style="font-size:2rem">${p.productType==='software'?'💻':'📦'}</span>`}
         <button class="share-btn-g" onclick="event.stopPropagation();openShare('${p.id}',this)" title="Share">${shareSVG}</button>
       </div>
       <div class="pname">${p.name}</div>
@@ -1142,11 +1193,23 @@ window.toggleCart=()=>{renderCart();document.getElementById('cartDrawer').classL
 ═══════════════════════════════════════════════════ */
 window.openProd=id=>{
   const p=prods.find(x=>x.id===id);if(!p)return;
-  document.getElementById('modalImg').innerHTML=p.image?`<img src="${p.image}" alt="${p.name}">`:`<span style="font-size:5rem">📦</span>`;
+  document.getElementById('modalImg').innerHTML=p.image?`<img src="${p.image}" alt="${p.name}">`:`<span style="font-size:5rem">${p.productType==='software'?'💻':'📦'}</span>`;
   document.getElementById('modalCat').textContent=p.category||'';
   document.getElementById('modalName').textContent=p.name;
   document.getElementById('modalPrice').innerHTML=`<small>MVR</small> ${Number(p.price||0).toLocaleString()}`;
   document.getElementById('modalDesc').textContent=p.description||'Quality tech product from CoderTech.';
+  // Software info box
+  const swBox=document.getElementById('modalSwInfo');
+  if(swBox){
+    if(p.productType==='software'){
+      let rows='';
+      if(p.version) rows+=`<div class="sw-info-row">📌 <strong>Version:</strong> ${p.version}</div>`;
+      if(p.platform) rows+=`<div class="sw-info-row">💻 <strong>Platform:</strong> ${p.platform}</div>`;
+      if(p.sysReq) rows+=`<div class="sw-info-row">⚙️ <strong>Requirements:</strong> ${p.sysReq}</div>`;
+      rows+=`<div class="sw-info-row" style="margin-top:6px;color:var(--ok);">✅ Download link & license key available after payment confirmed</div>`;
+      swBox.innerHTML=`<div class="sw-info-box"><div class="sw-info-title"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Digital Download</div>${rows}</div>`;
+    } else { swBox.innerHTML=''; }
+  }
   document.getElementById('modalAddBtn').onclick=()=>{
     if(!cu){closeProdModal();showLR();return;}
     addToCart({id:p.id,name:p.name,price:Number(p.price)||0,image:p.image||'',category:p.category||''});
@@ -1205,10 +1268,59 @@ window.placeOrder=async()=>{
     document.getElementById('slipFile').value='';
     ['ckAddr','ckNotes'].forEach(id=>document.getElementById(id).value='');
     showToast('🎉 Order placed! We\'ll contact you soon.','ok');
+    setTimeout(()=>openMyOrders(),900);
   }catch(err){showToast('Error: '+err.message,'err');}
   btn.innerHTML='<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Place Order';
   btn.disabled=false;
 };
+
+/* ═══════════════════════════════════════════════════
+   MY ORDERS & DOWNLOADS
+═══════════════════════════════════════════════════ */
+window.openMyOrders=async function(){
+  if(!cu){showLR();return;}
+  document.getElementById('sidebar').classList.remove('on');
+  document.getElementById('sbOv').classList.remove('on');
+  document.getElementById('myOrdersModal').classList.add('on');
+  const body=document.getElementById('myOrdersBody');
+  body.innerHTML='<div style="text-align:center;padding:30px;color:var(--t3);"><span class="spin" style="width:20px;height:20px;display:inline-block;"></span><p style="margin-top:8px;font-size:.82rem;">Loading your orders…</p></div>';
+  try{
+    const snap=await db.ref('ct_orders').orderByChild('customer/uid').equalTo(cu.id).once('value');
+    if(!snap.exists()){body.innerHTML='<div style="text-align:center;padding:40px 20px;color:var(--t3);font-size:.86rem;">No orders yet.<br>Start shopping! 🛍️</div>';return;}
+    let myOrders=[];snap.forEach(o=>myOrders.push({id:o.key,...o.val()}));
+    myOrders.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+    body.innerHTML='';
+    for(const o of myOrders){
+      const card=document.createElement('div');card.className='order-card';
+      const date=o.createdAt?new Date(o.createdAt).toLocaleDateString('en',{day:'numeric',month:'short',year:'numeric'}):'—';
+      const stCls='st-'+(o.status||'pending');
+      const stLbl=(o.status||'pending').charAt(0).toUpperCase()+(o.status||'pending').slice(1);
+      const items=o.items||[];
+      let itemsHtml='';
+      for(const item of items){
+        const prod=prods.find(x=>x.id===item.id);
+        const isSw=prod&&prod.productType==='software';
+        const imgHtml=prod&&prod.image?`<img class="order-item-img" src="${prod.image}" alt="" onerror="this.style.display='none'">`:'';
+        let dlHtml='';
+        if(isSw){
+          if(o.status==='completed'){
+            let dlBtn='';
+            if(prod.downloadUrl){dlBtn=`<a href="${prod.downloadUrl}" target="_blank" class="dl-btn"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download ${prod.name}</a>`;}
+            let keyHtml='';
+            if(prod.licenseKey){const sk=prod.licenseKey.replace(/\//g,'\\').replace(/'/g,"\'");keyHtml=`<div class="dl-key-box"><div><div class="dl-key-label">License Key</div><div class="dl-key-val">${prod.licenseKey}</div></div><button class="copy-btn" onclick="doCopy('${sk}','Key')">Copy</button></div>`;}
+            if(dlBtn||keyHtml){dlHtml=`<div class="dl-box"><div class="dl-box-title"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Payment Confirmed — Download Ready</div>${dlBtn}${keyHtml}</div>`;}
+          } else {
+            dlHtml=`<div class="dl-pending-note">⏳ Download link will appear here after admin confirms your payment</div>`;
+          }
+        }
+        itemsHtml+=`<div class="order-item-row">${imgHtml}<div class="order-item-name">${item.name}${isSw?' 💻':''} ×${item.qty}</div><div class="order-item-price">${fmt((item.price||0)*item.qty)}</div></div>${dlHtml?`<div>${dlHtml}</div>`:''}`;
+      }
+      card.innerHTML=`<div class="order-card-hdr"><div><div class="order-id">Order #${o.id.slice(-6).toUpperCase()}</div><div style="font-size:.72rem;color:var(--t3);margin-top:1px;">${date}</div></div><span class="order-status-badge ${stCls}">${stLbl}</span></div><div style="margin-bottom:8px;">${itemsHtml}</div><div style="display:flex;justify-content:space-between;padding-top:8px;border-top:1px solid var(--bd);"><span style="font-size:.76rem;color:var(--t2);">Total</span><span style="font-family:'Syne',sans-serif;font-weight:700;color:var(--p);">${fmt(o.total||0)}</span></div>`;
+      body.appendChild(card);
+    }
+  }catch(e){body.innerHTML=`<div style="text-align:center;padding:30px;color:var(--er);font-size:.82rem;">Error: ${e.message}</div>`;}
+};
+document.getElementById('myOrdersModal').addEventListener('click',e=>{if(e.target===document.getElementById('myOrdersModal'))document.getElementById('myOrdersModal').classList.remove('on');});
 
 /* ═══════════════════════════════════════════════════
    INIT
