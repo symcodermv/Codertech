@@ -94,6 +94,13 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 .cart-badge{position:absolute;top:-5px;right:-5px;background:var(--ac);color:#fff;font-size:.58rem;font-weight:800;width:17px;height:17px;border-radius:50%;display:none;align-items:center;justify-content:center;border:2px solid var(--bg);}
 .login-pill{background:linear-gradient(135deg,var(--p),var(--p2));border:none;border-radius:10px;padding:8px 14px;font-family:'Syne',sans-serif;font-size:.78rem;font-weight:700;color:#fff;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .2s;letter-spacing:.3px;box-shadow:0 4px 14px var(--glow);}
 .login-pill:hover{box-shadow:0 6px 22px rgba(var(--pr),.35);}
+.type-tab-wrap{background:var(--cats);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--bd);padding:8px 16px;display:flex;align-items:center;gap:8px;flex-shrink:0;transition:background .3s;}
+.type-tab-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--t3);margin-right:4px;}
+.sw-tab{padding:7px 16px;border-radius:30px;border:1.5px solid var(--bd2);background:var(--sur);color:var(--t2);font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:7px;transition:all .2s;white-space:nowrap;flex-shrink:0;}
+.sw-tab:hover{border-color:#f97316;color:#f97316;}
+.sw-tab.on{border-color:#f97316;color:#f97316;background:rgba(249,115,22,.09);box-shadow:0 0 14px rgba(249,115,22,.12);}
+.sw-tab .tab-count{font-size:.66rem;font-weight:700;padding:1px 7px;border-radius:20px;background:var(--sur2);color:var(--t3);transition:all .2s;}
+.sw-tab.on .tab-count{background:rgba(249,115,22,.15);color:#f97316;}
 .cats-wrap{background:var(--cats);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--bd);padding:10px 16px 0;overflow-x:auto;flex-shrink:0;transition:background .3s;}
 .cats-wrap::-webkit-scrollbar{display:none;}
 .cats-row{display:flex;gap:7px;padding-bottom:10px;}
@@ -399,7 +406,15 @@ main{padding:16px;flex:1;}
       <div class="t-search" style="display:flex;"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input type="text" placeholder="Search products…" id="searchInputMobile" oninput="filterProds()"></div>
     </div>
   </div>
-  <div class="cats-wrap"><div class="cats-row" id="catsRow"></div></div>
+  <!-- SOFTWARE TAB (physical uses category pills directly) -->
+  <div class="type-tab-wrap" id="typeTabWrap">
+    <button class="sw-tab" id="typeTabSoftware" onclick="toggleSoftwareTab()">
+      💻 Software
+      <span class="tab-count" id="tabCountSoftware">0</span>
+    </button>
+  </div>
+  <!-- CATEGORY PILLS (filtered by active type) -->
+  <div class="cats-wrap" id="catsWrap"><div class="cats-row" id="catsRow"></div></div>
   <main>
     <div class="sec-hdr">
       <h2 class="sec-title" id="secTitle">Popular</h2>
@@ -563,7 +578,7 @@ firebase.initializeApp({
 const db=firebase.database(),storage=firebase.storage();
 
 /* STATE */
-let prods=[],cats=[],curCat='All',viewMode='grid',gstRate=0;
+let prods=[],cats=[],curCat='All',curType='physical',viewMode='grid',gstRate=0;
 let bankSettings={bankName:'',accountName:'',accountNumber:''};
 let cu=JSON.parse(sessionStorage.getItem('ct_user')||'null');
 function getCart(){return JSON.parse(localStorage.getItem('ct_cart')||'[]');}
@@ -781,8 +796,19 @@ window.toggleSB=()=>{
 };
 window.sbSetCat=cat=>{
   toggleSB();
-  const p=document.querySelector(`.cat-pill[data-cat="${cat}"]`);
-  if(p)setCat(p,cat);
+  if(cat!=='All'){
+    const catObj=cats.find(c=>c.name===cat);
+    if(catObj){
+      const newType=catObj.type==='software'?'software':'physical';
+      if(newType!==curType){ setTypeFilter(newType); }
+    }
+  } else {
+    setTypeFilter('physical');
+  }
+  setTimeout(()=>{
+    const p=document.querySelector(`.cat-pill[data-cat="${cat}"]`);
+    if(p) setCat(p,cat);
+  },60);
 };
 window.doCopy=(t,l)=>{
   if(navigator.clipboard&&navigator.clipboard.writeText){
@@ -860,15 +886,98 @@ function autoOpenShareProduct(){
 /* CATEGORIES */
 function renderCats(){
   const row=document.getElementById('catsRow'),sb=document.getElementById('sbCatLinks');
-  row.innerHTML=`<button class="cat-pill ${curCat==='All'?'on':''}" data-cat="All" onclick="setCat(this,'All')"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>All</button>`
-    +cats.map(c=>`<button class="cat-pill ${curCat===c.name?'on':''}" data-cat="${c.name}" onclick="setCat(this,'${c.name}')">${c.icon||'📦'} ${c.name}</button>`).join('');
-  sb.innerHTML=cats.map(c=>`<button class="sb-link" onclick="sbSetCat('${c.name}')">${c.icon||'📦'} ${c.name}</button>`).join('');
+  const cw=document.getElementById('catsWrap');
+
+  // Update software tab count
+  const activeProds=prods.filter(p=>p.status!=='draft');
+  const softwareCount=activeProds.filter(p=>p.productType==='software').length;
+  const swCountEl=document.getElementById('tabCountSoftware');
+  if(swCountEl) swCountEl.textContent=softwareCount;
+
+  // When software tab is ON: show software sub-categories as pills
+  // When software tab is OFF: show physical categories as pills
+  const showSoftware = curType==='software';
+  const visibleCats = showSoftware
+    ? cats.filter(c=>c.type==='software')
+    : cats.filter(c=>c.type!=='software');
+
+  // Show/hide the cats-wrap row
+  if(cw) cw.style.display=visibleCats.length>0?'block':'none';
+
+  // Reset curCat if it no longer belongs to the active view
+  if(curCat!=='All'){
+    const catObj=cats.find(c=>c.name===curCat);
+    if(catObj){
+      const catIsSw=catObj.type==='software';
+      if(showSoftware&&!catIsSw) curCat='All';
+      if(!showSoftware&&catIsSw) curCat='All';
+    }
+  }
+
+  // Build pills — no "All" pill, show category names directly
+  if(visibleCats.length>0){
+    row.innerHTML=
+      `<button class="cat-pill ${curCat==='All'?'on':''}" data-cat="All" onclick="setCat(this,'All')">` +
+      `<svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>All</button>` +
+      visibleCats.map(c=>
+        `<button class="cat-pill ${curCat===c.name?'on':''}" data-cat="${c.name}" onclick="setCat(this,'${c.name}')">${c.icon||'📦'} ${c.name}</button>`
+      ).join('');
+  } else {
+    row.innerHTML='';
+  }
+
+  // Sidebar: grouped
+  const physical=cats.filter(c=>c.type!=='software');
+  const software=cats.filter(c=>c.type==='software');
+  let sbHtml='';
+  if(physical.length){
+    sbHtml+='<div class="sb-sec" style="padding-top:8px;">📦 Physical</div>';
+    sbHtml+=physical.map(c=>`<button class="sb-link" onclick="sbSetCat('${c.name}')">${c.icon||'📦'} ${c.name}</button>`).join('');
+  }
+  if(software.length){
+    sbHtml+='<div class="sb-sec" style="padding-top:8px;">💻 Software</div>';
+    sbHtml+=software.map(c=>`<button class="sb-link" onclick="sbSetCat('${c.name}')">${c.icon||'💻'} ${c.name}</button>`).join('');
+  }
+  if(sb) sb.innerHTML=sbHtml;
 }
+
+// Toggle the software tab on/off
+window.toggleSoftwareTab=function(){
+  const isOn = curType==='software';
+  // Switch to software or back to physical
+  curType = isOn ? 'physical' : 'software';
+  curCat='All';
+  const tabEl=document.getElementById('typeTabSoftware');
+  if(tabEl) tabEl.classList.toggle('on', curType==='software');
+  // Update section title
+  document.getElementById('secTitle').innerHTML =
+    curType==='software' ? '💻 Software & Digital' : 'Products';
+  renderCats();
+  renderProds();
+};
+
+// Called at startup and after data loads — set correct initial state
+window.setTypeFilter=function(type){
+  curType=type||'physical';
+  curCat='All';
+  const tabEl=document.getElementById('typeTabSoftware');
+  if(tabEl) tabEl.classList.toggle('on', curType==='software');
+  document.getElementById('secTitle').innerHTML =
+    curType==='software' ? '💻 Software & Digital' : 'Products';
+  renderCats();
+  renderProds();
+};
 window.setCat=(btn,cat)=>{
   curCat=cat;
   document.querySelectorAll('.cat-pill').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
-  document.getElementById('secTitle').innerHTML=cat==='All'?'Popular':'<span>'+cat+'</span>';
+  if(cat==='All'){
+    document.getElementById('secTitle').innerHTML =
+      curType==='software' ? '💻 Software & Digital' : 'Products';
+  } else {
+    // Show category name as page title — this is the key change!
+    document.getElementById('secTitle').innerHTML='<span>'+cat+'</span>';
+  }
   renderProds();
 };
 
@@ -876,6 +985,9 @@ window.setCat=(btn,cat)=>{
 function renderProds(){
   const qv=(document.getElementById('searchInput')?.value||document.getElementById('searchInputMobile')?.value||'').toLowerCase();
   let list=prods.filter(p=>p.status!=='draft');
+  // Software tab = only software; default (physical) = only non-software
+  if(curType==='software') list=list.filter(p=>p.productType==='software');
+  else list=list.filter(p=>(p.productType||'physical')!=='software');
   if(curCat!=='All') list=list.filter(p=>p.category===curCat);
   if(qv) list=list.filter(p=>(p.name||'').toLowerCase().includes(qv)||(p.category||'').toLowerCase().includes(qv)||(p.description||'').toLowerCase().includes(qv));
   const g=document.getElementById('prodGrid');
