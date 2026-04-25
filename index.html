@@ -586,65 +586,41 @@ function setMeta(id,attr,name,content){
   el.setAttribute('content',content);
 }
 
+
 /* ═══════════════════════════════════════════════════
-   SHARE SYSTEM — one-click, any platform, no raw URL
+   SHARE SYSTEM — image auto-preview on any platform
 ═══════════════════════════════════════════════════ */
-window.openShare=function(id,triggerBtn){
-  const p=prods.find(x=>x.id===id);
-  if(!p)return;
 
-  const shareUrl=window.location.origin+window.location.pathname+'?pid='+id;
-  const price='MVR '+Number(p.price||0).toLocaleString();
-  const desc=p.description||'';
-
-  // Update OG meta for link preview
-  updateOGMeta(p,shareUrl);
-
-  // Message text — clean, no raw image URL
-  const msgText=
-    '🛍️ *'+p.name+'*\n'+
-    '💰 '+price+'\n'+
-    (desc?'📝 '+desc+'\n':'')+
-    '\n🔗 '+shareUrl+'\n'+
-    '_CoderTech — Smart Tech Store_';
-
-  const eMsg=encodeURIComponent(msgText);
-  const eUrl=encodeURIComponent(shareUrl);
-
-  // Try native share first (mobile — ONE click)
-  if(navigator.share){
-    navigator.share({
-      title:p.name+' | CoderTech',
-      text:(desc?p.name+' — '+price+'\n'+desc:p.name+' — '+price),
-      url:shareUrl
-    }).catch(()=>{});
-    return; // Done — native sheet handles everything
-  }
-
-  // Desktop / browsers without native share → show popup
-  buildSharePopup(p,shareUrl,price,desc,eMsg,eUrl,triggerBtn);
-};
-
-function buildSharePopup(p,shareUrl,price,desc,eMsg,eUrl,triggerBtn){
+function buildSharePopup(p,shareUrl,price,desc,imgUrl,eMsg,eUrl,triggerBtn){
   const popup=document.getElementById('sharePopup');
   const storeName='CoderTech';
   const hostDisplay=window.location.hostname||storeName;
 
-  // Show thumb image but NEVER the raw URL
-  const thumbHtml=p.image
-    ?`<img src="${p.image}" alt="${p.name}" onerror="this.style.display='none'">`
+  // Show thumb image but NEVER the raw URL as text
+  const thumbHtml=imgUrl
+    ?`<img src="${imgUrl}" alt="${p.name}" onerror="this.style.display='none'">`
     :`<span style="font-size:1.5rem">📦</span>`;
 
-  const nativeBtn=`<button class="sp-icon-btn si-more" id="spNativeBtn" style="display:none">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>More
-    </button>`;
+  // Plain text for copy (readable, no markdown asterisks)
+  const msgPlain=p.name+' — '+price+(desc?'\n'+desc:'')+
+    (imgUrl?'\n'+imgUrl:'')+'\n\nShop: '+shareUrl+'\nCoderTech — Smart Tech Store';
+
+  const nativeBtn=navigator.share
+    ?`<button class="sp-icon-btn si-more" id="spNativeBtn">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>More
+      </button>`
+    :'';
 
   popup.innerHTML=`
-    <!-- Product card — image shown, URL hidden -->
+    <!-- Product image preview — large, clear, no URL shown -->
+    ${imgUrl?`<div style="width:100%;height:140px;border-radius:12px;overflow:hidden;margin-bottom:12px;background:var(--sur3);display:flex;align-items:center;justify-content:center;border:1px solid var(--bd);">
+      <img src="${imgUrl}" alt="${p.name}" style="width:100%;height:100%;object-fit:contain;padding:8px;" onerror="this.parentElement.style.display='none'">
+    </div>`:''}
+
+    <!-- Product info card -->
     <div class="sp-product-card">
-      <div class="sp-product-thumb">${thumbHtml}</div>
-      <div class="sp-product-info">
-        <div class="sp-product-name">${p.name}</div>
+      <div class="sp-product-info" style="flex:1;">
+        <div class="sp-product-name" style="font-size:.88rem;">${p.name}</div>
         <div class="sp-product-price">${price}</div>
         ${desc?`<div class="sp-product-desc">${desc}</div>`:''}
       </div>
@@ -709,18 +685,29 @@ function buildSharePopup(p,shareUrl,price,desc,eMsg,eUrl,triggerBtn){
 
   // Wire copy buttons
   popup.querySelector('#spCopyBtn').onclick=()=>{doCopy(shareUrl,'Link');closeShare();};
-  popup.querySelector('#spMsgCopyBtn').onclick=()=>{doCopy(msgText,'Message');closeShare();};
+  popup.querySelector('#spMsgCopyBtn').onclick=()=>{doCopy(msgPlain,'Message');closeShare();};
 
-  // Show native share if available on desktop but hidden above
+  // Native share button (shown in popup for desktop browsers that support it)
   if(navigator.share){
     const nb=popup.querySelector('#spNativeBtn');
     if(nb){
-      nb.style.display='flex';
       nb.onclick=async()=>{
         closeShare();
-        try{
-          await navigator.share({title:p.name+' | CoderTech',text:p.name+' — '+price+(desc?'\n'+desc:''),url:shareUrl});
-        }catch(e){}
+        if(imgUrl&&navigator.canShare){
+          try{
+            const res=await fetch(imgUrl,{mode:'cors',cache:'force-cache'});
+            if(res.ok){
+              const blob=await res.blob();
+              const ext=blob.type.includes('png')?'png':'jpg';
+              const file=new File([blob],p.name.replace(/\W+/g,'_')+'.'+ext,{type:blob.type});
+              if(navigator.canShare({files:[file]})){
+                await navigator.share({files:[file],title:p.name+' | CoderTech',text:p.name+' — '+price+(desc?'\n'+desc:''),url:shareUrl});
+                return;
+              }
+            }
+          }catch(e){}
+        }
+        try{await navigator.share({title:p.name+' | CoderTech',text:p.name+' — '+price+(desc?'\n'+desc:''),url:shareUrl});}catch(e){}
       };
     }
   }
@@ -744,41 +731,72 @@ function buildSharePopup(p,shareUrl,price,desc,eMsg,eUrl,triggerBtn){
   setTimeout(()=>document.addEventListener('click',closeShareOutside),50);
 };
 
-// Plain text for copy-message (no markdown)
-var _currentMsgText='';
-
-// Override openShare to capture msgText
-const _origOpenShare=window.openShare;
 window.openShare=function(id,triggerBtn){
   const p=prods.find(x=>x.id===id);
   if(!p)return;
   const shareUrl=window.location.origin+window.location.pathname+'?pid='+id;
   const price='MVR '+Number(p.price||0).toLocaleString();
   const desc=p.description||'';
-  _currentMsgText=p.name+' — '+price+(desc?'\n'+desc:'')+'\n\n'+shareUrl+'\nCoderTech — Smart Tech Store';
+  const imgUrl=p.image||'';
 
   updateOGMeta(p,shareUrl);
 
+  /* ── Message text ──────────────────────────────────────
+     The image URL is included so WhatsApp / Telegram / Viber
+     auto-fetch it and show a rich image preview inline.
+     In the popup UI we show a thumbnail card instead of the
+     raw URL, so users never see an ugly link.
+  ──────────────────────────────────────────────────────── */
   const msgText=
-    '🛍️ *'+p.name+'*\n💰 '+price+'\n'+
+    '🛍️ *'+p.name+'*\n'+
+    '💰 '+price+'\n'+
     (desc?'📝 '+desc+'\n':'')+
-    '\n🔗 '+shareUrl+'\n_CoderTech — Smart Tech Store_';
+    (imgUrl?'\n'+imgUrl+'\n':'')+       // ← image URL for platform auto-preview
+    '\n🔗 Shop: '+shareUrl+'\n'+
+    '_CoderTech — Smart Tech Store_';
+
   const eMsg=encodeURIComponent(msgText);
   const eUrl=encodeURIComponent(shareUrl);
 
+  /* Native share API (mobile) — passes image as a File so
+     the share sheet shows the actual product photo          */
   if(navigator.share){
-    navigator.share({
-      title:p.name+' | CoderTech',
-      text:(desc?p.name+' — '+price+'\n'+desc:p.name+' — '+price),
-      url:shareUrl
-    }).catch(()=>{
-      // If native share fails, fallback to popup
-      buildSharePopup(p,shareUrl,price,desc,eMsg,eUrl,triggerBtn);
-    });
+    if(imgUrl&&navigator.canShare){
+      // Try to share the image file so native sheet shows it
+      fetch(imgUrl,{mode:'cors',cache:'force-cache'})
+        .then(r=>r.ok?r.blob():Promise.reject())
+        .then(blob=>{
+          const ext=blob.type.includes('png')?'png':'jpg';
+          const file=new File([blob],p.name.replace(/\W+/g,'_')+'.'+ext,{type:blob.type});
+          if(navigator.canShare({files:[file]})){
+            return navigator.share({
+              files:[file],
+              title:p.name+' | CoderTech',
+              text:p.name+' — '+price+(desc?'\n'+desc:''),
+              url:shareUrl
+            });
+          }
+          return Promise.reject();
+        })
+        .catch(()=>{
+          // Fallback: share without file
+          navigator.share({
+            title:p.name+' | CoderTech',
+            text:p.name+' — '+price+(desc?'\n'+desc:''),
+            url:shareUrl
+          }).catch(()=>buildSharePopup(p,shareUrl,price,desc,imgUrl,eMsg,eUrl,triggerBtn));
+        });
+    } else {
+      navigator.share({
+        title:p.name+' | CoderTech',
+        text:p.name+' — '+price+(desc?'\n'+desc:''),
+        url:shareUrl
+      }).catch(()=>buildSharePopup(p,shareUrl,price,desc,imgUrl,eMsg,eUrl,triggerBtn));
+    }
     return;
   }
 
-  buildSharePopup(p,shareUrl,price,desc,eMsg,eUrl,triggerBtn);
+  buildSharePopup(p,shareUrl,price,desc,imgUrl,eMsg,eUrl,triggerBtn);
 };
 
 function closeShareOutside(e){
@@ -981,12 +999,15 @@ function loadData(){
 
 function autoOpenShareProduct(){
   const pid=new URLSearchParams(location.search).get('pid');
-  if(pid&&prods.length){
-    const p=prods.find(x=>x.id===pid);
-    if(p){
-      // Also update OG so page has correct meta
-      updateOGMeta(p,location.href);
-      setTimeout(()=>openProd(pid),350);
+  if(!pid||!prods.length) return;
+  // Only auto-open here if INIT block didn't already handle it
+  // (INIT handles it via polling; this is a safety net for logged-in users)
+  const p=prods.find(x=>x.id===pid);
+  if(p){
+    updateOGMeta(p,location.href);
+    // Only open if modal is not already open
+    if(!document.getElementById('prodModal').classList.contains('on')){
+      setTimeout(()=>openProd(pid),200);
     }
   }
 }
@@ -1196,11 +1217,25 @@ updateBadge();
 (()=>{
   const pid=new URLSearchParams(location.search).get('pid');
   if(pid){
+    // Auto-enter as guest if not already logged in, so product opens immediately
+    if(!cu){
+      document.getElementById('authScreen').classList.add('hidden');
+      document.getElementById('appScreen').classList.add('on');
+      document.getElementById('sbAv').textContent='G';
+      document.getElementById('sbName').textContent='Guest';
+      document.getElementById('sbPhone').textContent='Browsing as guest';
+      updateSbAuth();
+      loadData();
+    }
+    // Poll until products load then open the product modal
     const t=setInterval(()=>{
-      if(prods.length){clearInterval(t);openProd(pid);}
-    },300);
-    // Stop trying after 8 seconds
-    setTimeout(()=>clearInterval(t),8000);
+      if(prods.length){
+        clearInterval(t);
+        const p=prods.find(x=>x.id===pid);
+        if(p) openProd(pid);
+      }
+    },200);
+    setTimeout(()=>clearInterval(t),10000);
   }
 })();
 </script>
