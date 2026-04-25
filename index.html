@@ -542,7 +542,17 @@ function showToast(m,t=''){const el=document.getElementById('toast');el.textCont
 
 /* DATA */
 function loadData(){
-  db.ref('ct_products').on('value',s=>{prods=[];if(s.exists())s.forEach(c=>prods.push({id:c.key,...c.val()}));renderProds();autoOpenShareProduct();});
+  db.ref('ct_products').on('value',s=>{
+    prods=[];
+    if(s.exists()){
+      const raw=s.val();
+      Object.entries(raw).forEach(([key,val])=>{
+        if(val && typeof val==='object') prods.push({id:key,...val});
+      });
+    }
+    renderProds();
+    autoOpenShareProduct();
+  });
   db.ref('ct_categories').on('value',s=>{cats=[];if(s.exists())s.forEach(c=>cats.push({id:c.key,...c.val()}));renderCats();});
   db.ref('ct_settings/gst').on('value',s=>{gstRate=(s.exists()&&s.val()!==null)?parseFloat(s.val())||0:0;});
   db.ref('ct_settings/bank').on('value',s=>{
@@ -568,7 +578,7 @@ window.setCat=(btn,cat)=>{curCat=cat;document.querySelectorAll('.cat-pill').forE
 /* PRODUCTS */
 function renderProds(){
   const qv=(document.getElementById('searchInput')?.value||document.getElementById('searchInputMobile')?.value||'').toLowerCase();
-  let list=prods.filter(p=>!p.status||p.status==='active');
+  let list=prods.filter(p=>p.status!=='draft');
   if(curCat!=='All')list=list.filter(p=>p.category===curCat);
   if(qv)list=list.filter(p=>p.name.toLowerCase().includes(qv));
   const g=document.getElementById('prodGrid');
@@ -710,7 +720,7 @@ window.placeOrder=async()=>{
     document.getElementById('cartDrawer').classList.remove('on');document.getElementById('cartOv').classList.remove('on');
     slipFile=null;document.getElementById('slipPreview').style.display='none';document.getElementById('uploadTxt').textContent='Tap to upload payment slip';document.getElementById('slipFile').value='';
     ['ckAddr','ckNotes'].forEach(id=>document.getElementById(id).value='');
-    showToast("🎉 Order placed! We'll contact you soon.",'ok');
+    showToast('🎉 Order placed! We\'ll contact you soon.','ok');
   }catch(err){showToast('Error: '+err.message,'err');}
   btn.innerHTML='<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Place Order';btn.disabled=false;
 };
