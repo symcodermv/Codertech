@@ -578,6 +578,20 @@ firebase.initializeApp({
 const db=firebase.database(),storage=firebase.storage();
 
 /* STATE */
+// ── SET YOUR DEPLOYED SITE URL HERE ──────────────────────────────────
+// Replace with your actual domain/URL where this file is hosted.
+// Example: 'https://codertech.mv/shop' or 'https://yourdomain.com/store.html'
+// This is used for share links so they work from Telegram, WhatsApp etc.
+const SITE_URL = (()=>{
+  const h = window.location.hostname;
+  // If running on localhost/127.0.0.1 - use a placeholder (update this!)
+  if(h==='localhost'||h==='127.0.0.1'||h.startsWith('192.168')){
+    // ← CHANGE THIS to your real deployed URL
+    return window.location.origin + window.location.pathname;
+  }
+  return window.location.origin + window.location.pathname;
+})();
+
 let prods=[],cats=[],curCat='All',curType='physical',viewMode='grid',gstRate=0;
 let bankSettings={bankName:'',accountName:'',accountNumber:''};
 let cu=JSON.parse(sessionStorage.getItem('ct_user')||'null');
@@ -645,6 +659,11 @@ function buildSharePopup(p,shareUrl,price,desc,imgUrl,eMsg,eUrl,triggerBtn){
       <button class="sp-icon-btn si-copy" id="spCopyBtn"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy Link</button>
       <button class="sp-icon-btn si-copy" id="spMsgCopyBtn"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>Copy Msg</button>
     </div>
+    <div style="background:var(--sur2);border:1px solid var(--bd2);border-radius:9px;padding:8px 11px;margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:.68rem;color:var(--t3);flex-shrink:0;">Link:</span>
+      <span style="font-size:.7rem;color:var(--p);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:monospace;">${shareUrl}</span>
+      <button onclick="doCopy('${shareUrl}','Link')" style="background:rgba(var(--pr),.12);border:1px solid rgba(var(--pr),.25);color:var(--p);padding:3px 10px;border-radius:7px;font-size:.68rem;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;font-family:'DM Sans',sans-serif;">Copy</button>
+    </div>
     <div class="sp-close-row"><button class="sp-close-btn" onclick="closeShare()">✕ Close</button></div>`;
   popup.querySelector('#spCopyBtn').onclick=()=>{doCopy(shareUrl,'Link');closeShare();};
   popup.querySelector('#spMsgCopyBtn').onclick=()=>{doCopy(msgPlain,'Message');closeShare();};
@@ -663,12 +682,19 @@ function buildSharePopup(p,shareUrl,price,desc,imgUrl,eMsg,eUrl,triggerBtn){
 }
 window.openShare=function(id,triggerBtn){
   const p=prods.find(x=>x.id===id);if(!p)return;
-  const shareUrl=window.location.origin+window.location.pathname+'?pid='+id;
+  const shareUrl=SITE_URL.replace(/\?.*$/,'')+'?pid='+id;
   const price='MVR '+Number(p.price||0).toLocaleString();
   const desc=p.description||'';
   const imgUrl=p.image||'';
   updateOGMeta(p,shareUrl);
-  const msgText='🛍️ *'+p.name+'*\n💰 '+price+'\n'+(desc?'📝 '+desc+'\n':'')+'\n🔗 Shop: '+shareUrl+'\n_CoderTech_';
+  const msgText=
+    '🛍️ *'+p.name+'*\n'+
+    '💰 Price: '+price+'\n'+
+    (desc?'📝 '+desc+'\n':'')+
+    (p.productType==='software'?'💻 Digital / Software Download\n':'')+
+    (imgUrl?'\n🖼️ Product image: '+imgUrl+'\n':'')+
+    '\n🔗 View & Buy: '+shareUrl+'\n'+
+    '_CoderTech — Smart Tech Store_';
   const eMsg=encodeURIComponent(msgText),eUrl=encodeURIComponent(shareUrl);
   if(navigator.share){
     navigator.share({title:p.name+' | CoderTech',text:p.name+' — '+price,url:shareUrl})
@@ -872,15 +898,12 @@ function loadData(){
 }
 
 function autoOpenShareProduct(){
+  // Called when products data refreshes — only used for OG meta update
+  // Actual modal opening is handled in INIT block
   const pid=new URLSearchParams(location.search).get('pid');
-  if(!pid||!prods.length)return;
+  if(!pid||!prods.length) return;
   const p=prods.find(x=>x.id===pid);
-  if(p){
-    updateOGMeta(p,location.href);
-    if(!document.getElementById('prodModal').classList.contains('on')){
-      setTimeout(()=>openProd(pid),200);
-    }
-  }
+  if(p) updateOGMeta(p, SITE_URL.replace(/\?.*$/,'')+'?pid='+pid);
 }
 
 /* CATEGORIES */
@@ -1538,16 +1561,44 @@ updateBadge();
 (()=>{
   const pid=new URLSearchParams(location.search).get('pid');
   if(pid){
-    if(!cu){
-      document.getElementById('authScreen').classList.add('hidden');
-      document.getElementById('appScreen').classList.add('on');
+    // Someone opened a product share link.
+    // Skip the auth screen entirely and show the product immediately.
+    // The user can log in later if they want to buy.
+    document.getElementById('authScreen').classList.add('hidden');
+    document.getElementById('appScreen').classList.add('on');
+
+    if(cu){
+      // Logged-in user — set up their name in sidebar
+      document.getElementById('sbAv').textContent=cu.name.charAt(0).toUpperCase();
+      document.getElementById('sbName').textContent=cu.name;
+      document.getElementById('sbPhone').textContent='+960 '+cu.phone;
+      document.getElementById('ckPhone').value='+960'+cu.phone;
+      document.getElementById('ckName').value=cu.name;
+    } else {
+      // Guest
       document.getElementById('sbAv').textContent='G';
       document.getElementById('sbName').textContent='Guest';
       document.getElementById('sbPhone').textContent='Browsing as guest';
-      updateSbAuth();loadData();
     }
-    const t=setInterval(()=>{if(prods.length){clearInterval(t);openProd(pid);}},200);
-    setTimeout(()=>clearInterval(t),10000);
+    updateSbAuth();
+
+    // Load data if not already loaded
+    if(!prods.length) loadData();
+
+    // Wait for products to load then open the modal
+    let attempts=0;
+    const t=setInterval(()=>{
+      attempts++;
+      const p=prods.find(x=>x.id===pid);
+      if(p){
+        clearInterval(t);
+        // Switch to the correct type tab for this product
+        if(p.productType==='software') setTypeFilter('software');
+        openProd(pid);
+      } else if(attempts>50){ // 10 second timeout
+        clearInterval(t);
+      }
+    },200);
   }
 })();
 </script>
